@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hearts to Catch Your Attention</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #fff0f6;
+    text-align: center;
+  }
+  h1 {
+    color: #d6336c;
+  }
+  #hearts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  .heart {
+    font-size: 24px;
+    cursor: pointer;
+    margin: 5px;
+    user-select: none;
+    transition: transform 0.15s ease;
+  }
+  .heart:hover {
+    transform: scale(1.3);
+  }
+  .filled {
+    color: #e03131;
+  }
+  #info {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #5f3dc4;
+  }
+</style>
+</head>
+<body>
+  <h1>Hearts to Catch Your Attention</h1>
+  <p>Click on the hearts, each one you catch will be filled! Hearts will stay saved every day.</p>
+  <div id="hearts"></div>
+  <div id="info"></div>
+
+<script>
+  const totalHearts = 100;
+  const heartsContainer = document.getElementById('hearts');
+  const info = document.getElementById('info');
+
+  const storageKey = 'heartsToCatchAttention';
+
+  let heartsState = JSON.parse(localStorage.getItem(storageKey));
+  if (!heartsState || !Array.isArray(heartsState) || heartsState.length !== totalHearts) {
+    heartsState = new Array(totalHearts).fill(false);
+  }
+
+  function saveState() {
+    localStorage.setItem(storageKey, JSON.stringify(heartsState));
+  }
+
+  function updateInfo() {
+    const filledCount = heartsState.filter(Boolean).length;
+    info.textContent = `${filledCount} hearts filled. Keep catching attention!`;
+  }
+
+  function createHearts() {
+    heartsContainer.innerHTML = '';
+    heartsState.forEach((filled, i) => {
+      const heart = document.createElement('span');
+      heart.classList.add('heart');
+      heart.textContent = '♡';
+      if (filled) {
+        heart.classList.add('filled');
+        heart.textContent = '❤️';
+      }
+      heart.addEventListener('click', () => {
+        if (!heartsState[i]) {
+          heartsState[i] = true;
+          heart.classList.add('filled');
+          heart.textContent = '❤️';
+          saveState();
+          updateInfo();
+        }
+      });
+      heartsContainer.appendChild(heart);
+    });
+  }
+
+  createHearts();
+  updateInfo();
+</script>
+</body>
+</html>
