@@ -65,7 +65,11 @@
 
   function updateInfo() {
     const filledCount = heartsState.filter(Boolean).length;
-    info.textContent = `${filledCount} hearts filled. Keep catching attention!`;
+    if (filledCount === totalHearts) {
+      info.textContent = "Now that I've caught your attention, how about taking the next step?";
+    } else {
+      info.textContent = `${filledCount} hearts filled. Keep catching attention!`;
+    }
   }
 
   function createHearts() {
